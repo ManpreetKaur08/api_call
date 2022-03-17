@@ -3,67 +3,102 @@
 <html>
     <head>
         <title>API Call</title>
-    </head>
-    <script>
-        //Based on get weather ajax code. 
-        function getCall(){
+        <script   src="https://code.jquery.com/jquery-3.1.1.min.js"  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+        <style type = "text/css">
 
-            req = new XMLHttpRequest();
-            console.log("create request"); 
+            body{
 
-            req.open("GET", "https://www.7timer.info/bin/astro.php?lon=113.2&lat=23.1&ac=0&unit=metric&output=json&tzshift=0", true);
+                font-family: Georgia; 
+            }
 
-            console.log("open"); 
+        </style>
 
-            if (req.readyState == 4 && req.status == 200) {
+ <script>
 
+  function getCall(){
+    
+                req = new XMLHttpRequest();
+                console.log("create request"); 
+    
+                req.open("GET", "https://manpreetkaur08.github.io/api_call/api.json", true);
+    
+                console.log("open"); 
+    
+                req.onreadystatechange = function(){
 
-                console.log("receive response");
+                    console.log("ready state.");
+    
+                if (req.readyState == 4 && req.status == 200) {
+    
+    
+                    console.log("receive response");
+    
+                    new_data = req.responseText;
+    
+                    returnHTML = new_data;
+                    
+                    var data = JSON.parse(new_data);
+        
+                    returnHTML += "<br>"+
+    
+                        data["description"];
+        
+                    document.getElementById("message").innerHTML = returnHTML;
 
-                found = req.responseText;
+                    
+    
+    }
+            else if (req.readyState == 4 && req.status != 200) {
+    
+            document.getElementById("data").innerHTML = "Wrong";
+    
+    }
+    
+              else if (req.readyState == 3) {
+    
+              document.getElementById("data").innerHTML = "Try again";
+    
+    }
+        }
+    
+    }
+    // HTTP request
+     req.send();
+    console.log("Sent");
+  
+//function to onload fetch. 
+window.onload=function(){
 
-                alert(found);
+result = fetch("https://manpreetkaur08.github.io/api_call/api.json")
 
-              timer = JSON.parse(found);
-
-            document.getElementById("data").innerHTML ="wind: " + timer["direction"]["speed"]; 
-
-}
-        else if (req.readyState == 4 && req.status != 200) {
-
-        document.getElementById("data").innerHTML = "Wrong";
-
-}
-
-          else if (req.readyState == 3) {
-
-          document.getElementById("data").innerHTML = "Try again";
-
-}
-
-}
-// HTTP request
- req.send();
-   console.log("Sent");
-
-result = fetch("https://www.7timer.info/bin/astro.php?lon=113.2&lat=23.1&ac=0&unit=metric&output=json&tzshift=0")
-.then(result => result.text())
+.then (result => result.text())
 .then (data => 
    {
    data = JSON.parse(data)
-
-    data = data.direction.speed;
-       console.log("The current wind speed is " + data)
+  
+    console.log("The forecast is " + data); 
    })
 .catch (error => console.log(error))
 
-            
-    </script>
+
+    }
+    
+</script>
+       
+    </head>
+    
     <body onload="getCall()">
 
         <h1>Forecast</h1>
-        
-        <div id="data">Loading data</div>
+
+        <div id="messages">Loading data</div>
+
+        <p>The API selected is supposed to give a weather forecast of windspeed, transparency, and climate.</p>
+        <p>The actual JSON version of the API is: https://www.7timer.info/bin/astro.php?lon=113.2&lat=23.1&ac=0&unit=metric&output=json&tzshift=0</p>
+        <p>The website to find public APIs was in the reading: https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis/</p>
+        <p>The options used for this API request were to display weather forecast besides temperature. Instead, 
+        the use is for windspeed, direction, transparency, and cloud covering. These key-value pairs are incorporated because of the data that is being given. It is seen that all given values are based on integers.</p>
+        <p>This API would be useful for weather forecasters that want to know more about the climate and it would also be useful for anything that is used for testing climate, and may also be used for predictions in weather.</p>
      
     </body>
 
