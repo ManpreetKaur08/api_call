@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>API Call</title>
+    </head>
+    <script>
+        //Based on get weather ajax code. 
+        function getCall(){
+
+            req = new XMLHttpRequest();
+            console.log("create request"); 
+
+            req.open("GET", "https://www.7timer.info/bin/astro.php?lon=113.2&lat=23.1&ac=0&unit=metric&output=json&tzshift=0", true);
+
+            console.log("open"); 
+
+            if (req.readyState == 4 && req.status == 200) {
+
+
+                console.log("receive response");
+
+                found = req.responseText;
+
+                alert(found);
+
+              timer = JSON.parse(found);
+
+            document.getElementById("data").innerHTML ="wind: " + timer["direction"]["speed"]; 
+
+}
+        else if (req.readyState == 4 && req.status != 200) {
+
+        document.getElementById("data").innerHTML = "Wrong";
+
+}
+
+          else if (req.readyState == 3) {
+
+          document.getElementById("data").innerHTML = "Try again";
+
+}
+
+}
+// HTTP request
+ req.send();
+   console.log("Sent");
+
+result = fetch("https://www.7timer.info/bin/astro.php?lon=113.2&lat=23.1&ac=0&unit=metric&output=json&tzshift=0")
+.then(result => result.text())
+.then (data => 
+   {
+   data = JSON.parse(data)
+
+    data = data.direction.speed;
+       console.log("The current wind speed is " + data)
+   })
+.catch (error => console.log(error))
+
+            
+    </script>
+    <body onload="getCall()">
+
+        <h1>Forecast</h1>
+        
+        <div id="data">Loading data</div>
+     
+    </body>
+
+    
+</html>
